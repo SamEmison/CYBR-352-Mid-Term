@@ -27,8 +27,8 @@ public:
 
 class Cat {
 private:
-  const CatName& getName() const { return name; }
-  const std::string& getColor() const { return color; }
+  const CatName name;
+  const std::string color;
 
 public:
    Cat(const CatName& n, const std::string& c) : name(n), color(c) {
