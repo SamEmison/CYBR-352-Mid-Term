@@ -6,7 +6,6 @@
 class CatName {
 private:
   std::string value;
-
   CatName(const std::string& n) : value(n) {}
 
 public:
@@ -26,11 +25,20 @@ public:
   std::string get() const { return value; }
 };
 
-
-
 class Cat {
 public:
-    std::string name;
+  const CatName name;
+  const std::string color;
+
+  Cat(const CatName& n, const std::string& c) : name(n), color(c) {
+    if (c.empty() || c.size() > 20)
+      throw std::invalid_argument("Invalid cat color");
+    }
+};
+
+class Owner {
+public:
+  std::string name;
   std::vector<Cat> cats;
 
   Owner(std::string n) : name(n) {}
@@ -46,8 +54,6 @@ public:
   }
 };
 
-    Cat(std::string n, std::string c) : name(n), color(c) {}
-};
 
 
 int main() {
@@ -55,6 +61,8 @@ int main() {
         // Valid cat
     CatName goodName = CatName::of("Whiskers");
     Cat validCat(goodName, "white");
+    std::cout << "Added cat: " << validCat.name.get() << " (" << validCat.color << ")\n";
+    
 
         // Invalid cat name (too long)
     CatName badName = CatName::of("ThisNameIsWayTooLongToBeValid");  // triggers exception
