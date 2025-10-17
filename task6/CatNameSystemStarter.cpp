@@ -1,3 +1,5 @@
+//Pasted from frozen file
+//Sam Emison
 #include <iostream>
 #include <string>
 #include <vector>
@@ -39,19 +41,23 @@ public:
 
 class Owner {
 private:
-  int id;
+  const int id;
   std::string name;
   std::vector<std::shared_ptr<Cat>> cats;
 
 public:
   Owner(int i, const std::string& n) : id(i), name(n) {}
 
-  void addCat(const Cat& cat) { cats.push_back(cat); }
+  int getId() const { return id; }
+  
+  void addCat(const Cat& cat) {
+    cats.push_back(std::make_shared<Cat>(cat));
+  }
 
   void showCats() const {
-    std::cout << name << "'s Cats:\n";
+    std::cout << name << "'s Cats (ID: " << id << "):\n";
     for (const auto& c : cats)
-      std::cout << " - " << c.getName().get() << " (" << c.getColor() << ")\n";
+      std::cout << " - " << c->getName().get() << " (" << c->getColor() << ")\n";
   }
 
   // Controlled swap method
