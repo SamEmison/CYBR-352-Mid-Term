@@ -1,0 +1,106 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <stdexcept>
+#include <cctype>
+
+class CatName {
+private:
+  std::string value;
+  CatName(const std::string& n) : value(n) {}
+
+public:
+  static CatName of(const std::string& n) {
+        if (n.empty() || n.size() > 20) {
+            throw std::invalid_argument("Invalid cat name length");
+        }
+        for (char ch : n) {
+            if (!isalnum(ch) && ch != ' ' && ch != '-' && ch != '_') {
+                throw std::invalid_argument("Invalid character in cat name");
+            }
+        }
+        return CatName(n);
+    }
+  std::string get() const { return value; }
+};
+
+
+class Cat {
+private:
+    const CatName name;
+    const std::string color;
+
+public:
+   Cat(const CatName& n, const std::string& c) : name(n), color(c) {
+        if (c.empty() || c.size() > 20) {
+            throw std::invalid_argument("Invalid cat color");
+        }
+    }
+
+  const CatName& getName() const { return name; }
+  const std::string& getColor() const { return color; }
+};
+
+class Owner {
+private:
+    std::string name;
+    std::vector<Cat> cats;
+
+public:
+    Owner(const std::string& n) : name(n) {}
+
+    void addCat(const Cat& cat) {
+        cats.push_back(cat);
+    }
+
+    void showCats() const {
+        std::cout << name << "'s Cats:\n";
+        for (const auto& c : cats) {
+            std::cout << " - " << c.getName().get() << " (" << c.getColor() << ")\n";
+        }
+    }
+};
+
+int main() {
+  try {
+    // Valid cat
+    CatName goodName = CatName::of("Whiskers");
+    Cat validCat(goodName, "white");
+    std::cout << "Added cat: " << validCat.getName() << " (" << validCat.getColor() << ")\n";
+  }
+  
+  catch (const std::invalid_argument& e) {
+    std::cerr << "Error: " << e.what() << "\n";
+  }
+
+
+  
+  //Invalid cat
+  try {
+    CatName badName = CatName::of("ThisNameIsWayTooLongToBeValid");
+    Cat invalidCat(badName, "black"); // Not created
+  }
+  
+  catch (const std::invalid_argument& e) {
+    std::cerr << "Error: " << e.what() << "\n";
+  }
+  
+
+try {
+  Owner alice("Alice");
+  alice.addCat(Cat(CatName::of("Mittens"), "gray"));
+  alice.addCat(Cat(CatName::of("Fluffy"), "tabby"));
+  alice.showCats();
+
+  //Commented to allow compile
+  //Cat testCat(CatName::of("Test"), "green");
+  //testCat.getColor() = "blue";
+
+
+  
+ } catch (const std::invalid_argument& e) {
+  std::cerr << "Error: " << e.what() << "\n";
+ }
+
+return 0;
+}
