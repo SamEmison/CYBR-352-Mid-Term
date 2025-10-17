@@ -1,1 +1,17 @@
-test file
+<?xml version="1.0" encoding= "UTF-8"?>
+<!DOCTYPE cat [
+<!ENTITY e1 "Fluff">
+<!ENTITY e2 "&e1;&e1;">
+<!ENTITY e3 "&e2;&e2;">
+<!ENTITY e4 "&e3;&e3;">
+<!ENTITY bigname "&e4;&e3;">
+<!ENTITY ownername "&e2;&e1;">
+]>
+
+<cat>
+  <name>&bigname;</name>
+  <owner>&ownername;</owner>
+  <color>tabby</color>
+  <age>3</age>
+</cat>
+
